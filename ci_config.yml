@@ -1,5 +1,6 @@
 buildrunner:
   gradle:
 releaserunner:
-  gradle: jar assemble
+  gradle:
+    task: assemble
 environment_image: sjc-docker-registry.ustream-adm.in/build-tools/ci-base-images/jvm-trusty:latest
