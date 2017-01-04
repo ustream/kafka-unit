@@ -4,3 +4,7 @@ releaserunner:
   gradle:
     task: assemble
 environment_image: sjc-docker-registry.ustream-adm.in/build-tools/ci-base-images/jvm-trusty:latest
+extensions:
+  archiva_uploader:
+    paths:
+    - build/libs/*.jar
