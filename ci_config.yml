@@ -8,3 +8,4 @@ extensions:
   archiva_uploader:
     paths:
     - build/libs/*.jar
+    - build/poms/*.pom
