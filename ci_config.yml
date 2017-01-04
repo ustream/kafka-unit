@@ -2,7 +2,7 @@ buildrunner:
   gradle:
 releaserunner:
   gradle:
-    task: assemble
+    task: install
 environment_image: sjc-docker-registry.ustream-adm.in/build-tools/ci-base-images/jvm-trusty:latest
 extensions:
   archiva_uploader:
