@@ -6,6 +6,7 @@ releaserunner:
 environment_image: sjc-docker-registry.ustream-adm.in/build-tools/ci-base-images/jvm-trusty:latest
 extensions:
   archiva_uploader:
+    repository: internal
     paths:
     - build/libs/*.jar
     - build/poms/*.pom
