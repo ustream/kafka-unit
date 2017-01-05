@@ -16,7 +16,7 @@ apply from: 'ci.gradle'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-group = 'ustream'
+group = 'info.batey.kafka'
 
 jar {
     baseName = 'kafka-unit'

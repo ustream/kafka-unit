@@ -1,8 +1,7 @@
-tasks.install.doLast {
-    copy {
-        from 'build/poms'
-        into 'build/poms'
-        include 'pom-default.xml'
-        rename ('pom-default.xml', project.name + '-' + project.version + '.pom')
-    }
+tasks.jar.doLast {
+    pom {
+        project {
+            groupId 'ustream'
+        }
+    }.writeTo('build/poms/' + project.name + '-' + project.version + '.pom')
 }
