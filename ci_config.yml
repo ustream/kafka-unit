@@ -10,3 +10,5 @@ extensions:
     paths:
     - build/libs/*.jar
     - build/poms/*.pom
+  sonarqube:
+    scan_branch: True
