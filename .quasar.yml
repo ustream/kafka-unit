@@ -12,3 +12,4 @@ extensions:
     - build/poms/*.pom
   sonarqube:
     scan_branch: True
+    sonar_sync: True
