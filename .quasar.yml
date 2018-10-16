@@ -1,15 +1,66 @@
-buildrunner:
-  gradle:
-releaserunner:
-  gradle:
-    task: jar
-environment_image: sjc-docker-registry.ustream-adm.in/build-tools/ci-base-images/jvm-trusty:latest
-extensions:
-  archiva_uploader:
-    repository: internal
-    paths:
-    - build/libs/*.jar
-    - build/poms/*.pom
-  sonarqube:
-    scan_branch: True
-    sonar_sync: True
+version: 2.0
+actions:
+  build:
+    type: script
+    options:
+      commands:
+        - "./gradlew clean build \
+          --refresh-dependencies \
+          --no-daemon \
+          -PtestCoverage='true' \
+          -PGRADLE_USER_HOME='/root/.gradle' \
+          -Dorg.gradle.jvmargs='-Xms1024m -Xmx8192m'"
+    runtime:
+      type: docker
+      options:
+        image: registry.ng.bluemix.net/build_tools/ci-base-images/jvm-trusty:latest
+
+  release:
+    type: script
+    options:
+      commands:
+        - "./gradlew jar \
+        --refresh-dependencies \
+        --no-daemon \
+        -Dorg.gradle.jvmargs='-Xms1024m -Xmx8192m'"
+    runtime:
+      type: docker
+      options:
+        image: registry.ng.bluemix.net/build_tools/ci-base-images/jvm-trusty:latest
+
+  test_result_upload: 
+    type: artifact_publisher
+    options:
+      junit:
+        - build/**/TEST-*.xml
+      jacoco:
+        coverage_pattern: 'tv.ustream.aggregator.*'
+
+  sonar:
+    type: sonar
+    options:
+      check_quality_gate_on: never
+
+pipelines:
+  ci:
+    actions:
+      - build
+      - test_result_upload
+      - sonar
+    runif:
+      - ${Q_BUILD_EVENT}:
+          not: tag   
+
+  release:
+      extends: ci
+      actions:
+        - release
+        - type: archiva_uploader
+          options:
+            repository: internal
+            paths:
+              - build/libs/*.jar:${Q_PROJECT_NAME}/${RELEASE_VERSION}/*.jar
+              - build/poms/*.pom:${Q_PROJECT_NAME}/${RELEASE_VERSION}/*.pom
+      runif:
+        - ${Q_BUILD_EVENT}: tag
+          ${Q_ENVIRONMENT}: ci
